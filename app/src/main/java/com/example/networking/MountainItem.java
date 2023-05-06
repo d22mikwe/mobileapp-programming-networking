@@ -4,13 +4,14 @@ package com.example.networking;
 public class MountainItem {
 
 
-    private String title;
-    public MountainItem (String title) {
-        this.title = title;
+
+    private String name;
+    public MountainItem (String name) {
+        this.name = name;
     }
 
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }
