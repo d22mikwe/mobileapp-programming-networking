@@ -35,18 +35,15 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     @Override
     public void onPostExecute(String json) {
         Log.d("MainActivity", json);
-
         Gson newGson = new Gson();
         Type newType = new TypeToken<List<MountainItem>>() {}.getType();
         items = newGson.fromJson(json, newType);
-
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, items, new RecyclerViewAdapter.OnClickListener() {
             @Override
             public void onClick(MountainItem item) {
                 Toast.makeText(MainActivity.this, item.getName(), Toast.LENGTH_SHORT).show();
             }
         });
-
         RecyclerView view = findViewById(R.id.recycler_view);
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));

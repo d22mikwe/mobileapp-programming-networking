@@ -1,42 +1,40 @@
 
 # Rapport
 
-**Skriv din rapport här!**
-
-_Du kan ta bort all text som finns sedan tidigare_.
-
-## Följande grundsyn gäller dugga-svar:
-
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
-
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
-
+Det första jag gjorde var att lägga till en recyclerview widget samt en layout fil på activityn. 
+Sedan skapade jag en item klass och en item list xml fil. Detta för att representera 
+ett item.
 ```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
-    }
+public class MountainItem {
+     private String name;
+
+     public MountainItem (String name) {
+         this.name = name;
+     }
+     public String getName() {
+         return name;
+     } 
 }
 ```
+Efter detta skapade jag en RecyclerViewAdapter samt la till kod i Main Activity för att kunna översätta datan från Json filerna med hjälp av Gson.
 
-Bilder läggs i samma mapp som markdown-filen.
+```
+new JsonFile(this, this).execute(JSON_FILE);
+new JsonTask(this).execute(JSON_URL);
 
-![](android.png)
+Gson newGson = new Gson();
+Type newType = new TypeToken<List<MountainItem>>() {}.getType();
+items = newGson.fromJson(json, newType);
+```
+Till sist med hjälp av en OnClickListener för RecyclerViewAdapterns objekt kan vi visa datan för det itemet som vi klickar på.
+I detta fall är det bara namnet på berget.
+```
+RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, items, new RecyclerViewAdapter.OnClickListener() {
+            @Override
+            public void onClick(MountainItem item) {
+                Toast.makeText(MainActivity.this, item.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+```
 
-Läs gärna:
-
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
+![](Screen1.png)
